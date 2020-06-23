@@ -1,4 +1,5 @@
 .App {
+  position: relative;
   display: flex;
   justify-content: space-around;
   height: 100vh;
@@ -6,17 +7,23 @@
   background-image: linear-gradient(120deg, #84fab0 0%, #8fd3f4 100%);
 }
 
+.tableTitle {
+  font-size: 2rem;
+}
+
 .todoList {
-  position: relative;
   height: 50vh;
   width: 60vw;
+  overflow-y: scroll;
   margin-top: 25vh;
   padding: 20px;
   background-image: linear-gradient(to top, #cfd9df 0%, #e2ebf0 100%);
   border-radius: 20px;
+  margin-bottom: 40px;
 }
 
 .todo {
+  list-style: none;
   display: flex;
   background-image: linear-gradient(120deg, #fdfbfb 0%, #ebedee 100%);
   padding: 10px;
@@ -29,21 +36,31 @@
   background-image: linear-gradient(120deg, #cb22bd 0%, #ab3564 100%);
 }
 
+.todoText {
+  font-weight: 300;
+  font-size: large;
+  text-align: center;
+}
+
 .todoHeader {
   padding: 0 10px 10px 10px;
-  font-weight: 700;
+  font-weight: 200;
   font-size: x-large;
   display: flex;
   justify-content: space-between;
 }
 
-.todoText {
-  font-weight: 300;
-  font-size: large;
+.todoColumn {
+  flex: 1;
+  justify-content: center;
 }
 
-.secondList {
-  margin-top: 40px;
+.lastColumn {
+  text-align: right;
+}
+
+.firstColumn {
+  text-align: left;
 }
 
 .addButton {
@@ -58,4 +75,8 @@
   font-size: 32px;
   font-weight: 700;
   border-radius: 50%;
+}
+
+.link {
+  cursor: pointer;
 }
