@@ -1,4 +1,4 @@
-import React, { useReducer, useContext } from "react";
+import React, { useReducer, useContext, useState } from "react";
 import "./App.css";
 import todos from "./utils/data";
 import { TodoType } from "./utils/types";
@@ -12,13 +12,18 @@ const initialState: AAState = {
 };
 
 type ReducerAction = {
-  type: "markTodoComplete" | "markTodoIncomplete";
+  type: "markTodoComplete" | "markTodoIncomplete" | "createTodo";
   payload: TodoType;
 };
 
 const reducer = (state: AAState, action: ReducerAction) => {
   const todo = action.payload;
   switch (action.type) {
+    case "createTodo":
+      return {
+        ...state,
+        todos: [...todos, todo],
+      };
     case "markTodoComplete":
       return {
         ...state,
@@ -75,6 +80,58 @@ const Todo: React.FC<TodoProps> = ({ todo }) => {
   );
 };
 
+type TodoInputProps = {};
+
+const TodoInput: React.FC<TodoInputProps> = () => {
+  const [name, setName] = useState<string>("");
+  const [dueDate, setDueDate] = useState<Date>(new Date());
+  const { state, dispatch } = useContext(ReducerContext);
+  const changeName = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setName(e.currentTarget.value);
+  };
+  const changeDueDate = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.currentTarget.valueAsDate) setDueDate(e.currentTarget.valueAsDate);
+  };
+  const clearForm = () => {
+    setName("");
+    setDueDate(new Date());
+  };
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    dispatch({
+      type: "createTodo",
+      payload: { id: state.todos.length, name, dueDate, completed: false },
+    });
+    clearForm();
+  };
+  return (
+    <form className="todoForm" onSubmit={handleSubmit}>
+      <input
+        name="name"
+        type="text"
+        onChange={(e) => changeName(e)}
+        className="todoInput"
+        value={name}
+        placeholder="new todo"
+      ></input>
+      <input
+        name="dueDate"
+        type="date"
+        onChange={changeDueDate}
+        className="todoInput"
+        value={dueDate.toDateString()}
+      ></input>
+      <button
+        type="submit"
+        className="todoSubmitButton"
+        disabled={!!name && !!dueDate}
+      >
+        Add Todo
+      </button>
+    </form>
+  );
+};
+
 const ReducerContext = React.createContext<{
   state: AAState;
   dispatch: React.Dispatch<ReducerAction>;
@@ -85,7 +142,6 @@ const App = () => {
   const { todos } = state;
   const incompleteTodos = todos.filter((todo) => !todo.completed);
   const completedTodos = todos.filter((todo) => todo.completed);
-
   return (
     <ReducerContext.Provider value={{ state, dispatch }}>
       <div className="App">
@@ -95,6 +151,7 @@ const App = () => {
             <div />
             <div />
           </div>
+          <TodoInput />
           {incompleteTodos.length ? (
             incompleteTodos.map((todo, todoIndex) => {
               return <Todo key={`todo${todoIndex}`} todo={todo} />;
@@ -116,7 +173,6 @@ const App = () => {
               ))}
             </React.Fragment>
           ) : null}
-          <button className="addButton">+</button>
         </div>
       </div>
     </ReducerContext.Provider>
