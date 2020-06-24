@@ -19,7 +19,13 @@ const initialState: AAState = {
 };
 
 type ReducerAction = {
-  type: "markTodoComplete" | "markTodoIncomplete" | "createTodo";
+  type:
+    | "markTodoComplete"
+    | "markTodoIncomplete"
+    | "createTodo"
+    | "deleteTodo"
+    | "moveTodoUp"
+    | "moveTodoDown";
   payload: TodoType;
 };
 
@@ -47,6 +53,12 @@ const reducer = (state: AAState, action: ReducerAction) => {
           { ...todo, completed: false },
         ],
       };
+    case "moveTodoUp":
+      return state;
+    case "moveTodoDown":
+      return state;
+    case "deleteTodo":
+      return state;
     default:
       throw new Error();
   }
@@ -64,6 +76,12 @@ const Todo: React.FC<TodoProps> = ({ todo }) => {
   const markIncomplete = () => {
     dispatch({ type: "markTodoIncomplete", payload: todo });
   };
+  const sortUp = () => {
+    dispatch({ type: "moveTodoUp", payload: todo });
+  };
+  const sortDown = () => {
+    dispatch({ type: "moveTodoDown", payload: todo });
+  };
   const toggleCompleted = () => {
     todo.completed ? markIncomplete() : markComplete();
   };
@@ -72,11 +90,14 @@ const Todo: React.FC<TodoProps> = ({ todo }) => {
       className={`todo ${todo.completed ? "completedTodo" : "incompleteTodo"}`}
     >
       {todo.completed ? (
-        <div className="sortingButton sortRestore link">
+        <div
+          className="sortingButton sortRestore link"
+          onClick={markIncomplete}
+        >
           <FaRecycle />
         </div>
       ) : (
-        <div className="sortingButton sortComplete link">
+        <div className="sortingButton sortComplete link" onClick={markComplete}>
           <FaCheck />
         </div>
       )}
@@ -125,7 +146,13 @@ const TodoInput: React.FC<TodoInputProps> = () => {
     e.preventDefault();
     dispatch({
       type: "createTodo",
-      payload: { id: state.todos.length, name, dueDate, completed: false },
+      payload: {
+        id: state.todos.length,
+        name,
+        dueDate,
+        completed: false,
+        sortOrder: state.todos.length,
+      },
     });
     clearForm();
   };
@@ -162,11 +189,19 @@ const ReducerContext = React.createContext<{
   dispatch: React.Dispatch<ReducerAction>;
 }>({ state: { todos: [] }, dispatch: () => {} });
 
+const sortDescByDueDate = (todos: TodoType[]) => {
+  return todos.sort((a, b) => Number(b.dueDate) - Number(a.dueDate));
+};
+
 const App = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const { todos } = state;
-  const incompleteTodos = todos.filter((todo) => !todo.completed);
-  const completedTodos = todos.filter((todo) => todo.completed);
+  const incompleteTodos = sortDescByDueDate(
+    todos.filter((todo) => !todo.completed)
+  );
+  const completedTodos = sortDescByDueDate(
+    todos.filter((todo) => todo.completed)
+  );
   return (
     <ReducerContext.Provider value={{ state, dispatch }}>
       <div className="App">
