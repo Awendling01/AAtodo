@@ -2,6 +2,13 @@ import React, { useReducer, useContext, useState } from "react";
 import "./App.css";
 import todos from "./utils/data";
 import { TodoType } from "./utils/types";
+import {
+  FaArrowUp,
+  FaArrowDown,
+  FaTimes,
+  FaRecycle,
+  FaCheck,
+} from "react-icons/fa";
 
 type AAState = {
   todos: TodoType[];
@@ -61,22 +68,40 @@ const Todo: React.FC<TodoProps> = ({ todo }) => {
     todo.completed ? markIncomplete() : markComplete();
   };
   return (
-    <ul className="todo">
-      <li className="todoColumn name">
-        <div className="todoText firstColumn">{todo.name}</div>
-      </li>
-      <li className="todoColumn dueDate">
-        <div className="todoText">{todo.dueDate.toDateString()}</div>
-      </li>
-      <li className="todoColumn completed">
-        <div
-          className="todoText lastColumn statusToggle link"
-          onClick={toggleCompleted}
-        >
-          {todo.completed ? "Complete" : "Incomplete"}
+    <div
+      className={`todo ${todo.completed ? "completedTodo" : "incompleteTodo"}`}
+    >
+      {todo.completed ? (
+        <div className="sortingButton sortRestore link">
+          <FaRecycle />
         </div>
-      </li>
-    </ul>
+      ) : (
+        <div className="sortingButton sortComplete link">
+          <FaCheck />
+        </div>
+      )}
+      <div className="todoColumn name">
+        <div className="todoText firstColumn">{todo.name}</div>
+      </div>
+      <div className="todoColumn dueDate">
+        <div className="todoText">{todo.dueDate.toDateString()}</div>
+      </div>
+      <div className="todoColumn sortingButtonGroup">
+        {!todo.completed ? (
+          <React.Fragment>
+            <div className="sortingButton sortUp link">
+              <FaArrowUp />
+            </div>
+            <div className="sortingButton sortDown link">
+              <FaArrowDown />
+            </div>
+          </React.Fragment>
+        ) : null}
+        <div className="sortingButton sortDelete link">
+          <FaTimes />
+        </div>
+      </div>
+    </div>
   );
 };
 
