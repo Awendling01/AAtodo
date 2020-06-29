@@ -1,7 +1,34 @@
-import React from "react";
+import React, { useReducer, useContext, useState } from "react";
 import "./App.css";
 import todos from "./utils/data";
 import { TodoType } from "./utils/types";
+
+type AAState = {
+  todos: TodoType[];
+};
+
+const initialState: AAState = {
+  todos,
+};
+
+type reducerAction = {
+  type: "markTodoComplete" | "markTodoIncomplete";
+  payload: TodoType;
+};
+
+const reducer = (state: AAState, action: reducerAction) => {
+  const todo = action.payload;
+  switch (action.type) {
+    case "markTodoComplete":
+      return {
+        ...state,
+        todos: [
+          state.todos.filter((td) => td.id !== todo.id),
+          { ...todo, completed: true },
+        ],
+      };
+  }
+};
 
 type TodoProps = {
   todo: TodoType;
@@ -10,7 +37,7 @@ type TodoProps = {
 
 const Todo: React.FC<TodoProps> = ({ todo, todoIndex }) => {
   return (
-    <div className="todo">
+    <div className="todo link">
       <div className="name todoText">{todo.name}</div>
       <div className="dueDate todoText">{todo.dueDate.toDateString()}</div>
       <div className="completed todoText">
@@ -21,27 +48,6 @@ const Todo: React.FC<TodoProps> = ({ todo, todoIndex }) => {
 };
 
 const App = () => {
-  // const upcomingTodos = todos.filter(
-  //   (todo) => Number(todo.dueDate) > Number(new Date())
-  // );
-
-  // const overdueTodos = todos.filter(
-  //   (todo) => Number(todo.dueDate) < Number(new Date())
-  // );
-
-  // const todaysTodos = todos.filter(
-  //   (todo) => Number(todo.dueDate) === Number(new Date())
-  // );
-
-  // const categoryNames = todos
-  //   .map((todo) => todo.category)
-  //   .filter((v, i, a) => a.indexOf(v) === i);
-
-  // const todosByCategory = categoryNames.map((categoryName) => ({
-  //   categoryName,
-  //   categoryTodos: todos.filter((todo) => todo.category === categoryName),
-  // }));
-
   const incompleteTodos = todos.filter((todo) => !todo.completed);
 
   const completedTodos = todos.filter((todo) => todo.completed);
@@ -71,7 +77,7 @@ const App = () => {
             <Todo key={`todo${todoIndex}`} todo={todo} todoIndex={todoIndex} />
           );
         })}
-        <button className="addButton">+</button>
+        <div className="addButton">+</div>
       </div>
     </div>
   );
