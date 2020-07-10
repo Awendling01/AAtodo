@@ -1,4 +1,5 @@
 import React, { useReducer, useContext, useState } from "react";
+import DatePicker from "react-date-picker";
 import "./App.css";
 import todos from "./utils/data";
 import { TodoType } from "./utils/types";
@@ -11,11 +12,16 @@ import {
 } from "react-icons/fa";
 
 type AAState = {
-  todos: TodoType[];
+  todos: { completed: TodoType[]; incomplete: TodoType[] };
+  categories: string[];
 };
 
 const initialState: AAState = {
-  todos,
+  todos: {
+    completed: todos.filter((todo) => todo.completed),
+    incomplete: todos.filter((todo) => !todo.completed),
+  },
+  categories: [],
 };
 
 type ReducerAction = {
@@ -31,34 +37,113 @@ type ReducerAction = {
 
 const reducer = (state: AAState, action: ReducerAction) => {
   const todo = action.payload;
+  const { completed, sortOrder, id } = todo;
+  const {
+    completed: completedTodos,
+    incomplete: incompleteTodos,
+  } = state.todos;
+  const previousTodo = completed
+    ? state.todos.completed.find((td) => td.sortOrder === sortOrder - 1)
+    : state.todos.incomplete.find((td) => td.sortOrder === sortOrder - 1);
+  const nextTodo = completed
+    ? state.todos.completed.find((td) => td.sortOrder === sortOrder + 1)
+    : state.todos.incomplete.find((td) => td.sortOrder === sortOrder + 1);
+  const movedUpTodo = { ...todo, sortOrder: sortOrder - 1 };
+  const movedDownTodo = { ...todo, sortOrder: sortOrder + 1 };
+
   switch (action.type) {
     case "createTodo":
       return {
         ...state,
-        todos: [...todos, todo],
+        todos: {
+          ...state.todos,
+          incomplete: [...incompleteTodos, todo],
+        },
       };
     case "markTodoComplete":
       return {
         ...state,
-        todos: [
-          ...state.todos.filter((td) => td.id !== todo.id),
-          { ...todo, completed: true },
-        ],
+        todos: {
+          completed: [...completedTodos, { ...todo, completed: true }],
+          incomplete: incompleteTodos.filter(
+            (incompleteTodo) => incompleteTodo.id !== id
+          ),
+        },
       };
     case "markTodoIncomplete":
       return {
         ...state,
-        todos: [
-          ...state.todos.filter((td) => td.id !== todo.id),
-          { ...todo, completed: false },
-        ],
+        todos: {
+          completed: completedTodos.filter(
+            (completedTodo) => completedTodo.id !== id
+          ),
+          incomplete: [...incompleteTodos, { ...todo, completed: false }],
+        },
       };
     case "moveTodoUp":
-      return state;
+      if (previousTodo) {
+        if (!completed) {
+          const newMovedUpState = {
+            ...state,
+            todos: {
+              ...state.todos,
+              incomplete: [
+                ...incompleteTodos.filter(
+                  (incompleteTodo) =>
+                    incompleteTodo.id !== id &&
+                    incompleteTodo.sortOrder !== sortOrder - 1
+                ),
+                movedUpTodo,
+                { ...previousTodo, sortOrder: previousTodo.sortOrder + 1 },
+              ],
+            },
+          };
+          return newMovedUpState;
+        }
+      } else {
+        return { ...state };
+      }
     case "moveTodoDown":
-      return state;
+      if (nextTodo && !completed) {
+        const newMovedUpState = {
+          ...state,
+          todos: {
+            ...state.todos,
+            incomplete: [
+              ...incompleteTodos.filter(
+                (incompleteTodo) =>
+                  incompleteTodo.id !== id &&
+                  incompleteTodo.sortOrder !== sortOrder + 1
+              ),
+              movedDownTodo,
+              { ...nextTodo, sortOrder: nextTodo.sortOrder - 1 },
+            ],
+          },
+        };
+        return newMovedUpState;
+      } else {
+        return { ...state };
+      }
     case "deleteTodo":
-      return state;
+      if (completed) {
+        return {
+          ...state,
+          todos: {
+            ...state.todos,
+            completed: [...state.todos.completed.filter((td) => td.id !== id)],
+          },
+        };
+      } else {
+        return {
+          ...state,
+          todos: {
+            ...state.todos,
+            incomplete: [
+              ...state.todos.incomplete.filter((td) => td.id !== id),
+            ],
+          },
+        };
+      }
     default:
       throw new Error();
   }
@@ -70,6 +155,7 @@ type TodoProps = {
 
 const Todo: React.FC<TodoProps> = ({ todo }) => {
   const { dispatch } = useContext(ReducerContext);
+  //Event Handler Functions
   const markComplete = () => {
     dispatch({ type: "markTodoComplete", payload: todo });
   };
@@ -85,10 +171,18 @@ const Todo: React.FC<TodoProps> = ({ todo }) => {
   const toggleCompleted = () => {
     todo.completed ? markIncomplete() : markComplete();
   };
+  const doSomething = () => {
+    alert("I did it!");
+  };
+  const deleteTodo = () => {
+    dispatch({ type: "deleteTodo", payload: todo });
+  };
+
   return (
     <div
       className={`todo ${todo.completed ? "completedTodo" : "incompleteTodo"}`}
     >
+      <button onClick={doSomething}>Do It!</button>
       {todo.completed ? (
         <div
           className="sortingButton sortRestore link"
@@ -110,15 +204,15 @@ const Todo: React.FC<TodoProps> = ({ todo }) => {
       <div className="todoColumn sortingButtonGroup">
         {!todo.completed ? (
           <React.Fragment>
-            <div className="sortingButton sortUp link">
+            <div onClick={sortUp} className="sortingButton sortUp link">
               <FaArrowUp />
             </div>
-            <div className="sortingButton sortDown link">
+            <div onClick={sortDown} className="sortingButton sortDown link">
               <FaArrowDown />
             </div>
           </React.Fragment>
         ) : null}
-        <div className="sortingButton sortDelete link">
+        <div className="sortingButton sortDelete link" onClick={deleteTodo}>
           <FaTimes />
         </div>
       </div>
@@ -126,17 +220,19 @@ const Todo: React.FC<TodoProps> = ({ todo }) => {
   );
 };
 
-type TodoInputProps = {};
+type TodoFormProps = {};
 
-const TodoInput: React.FC<TodoInputProps> = () => {
+const TodoForm: React.FC<TodoFormProps> = () => {
   const [name, setName] = useState<string>("");
   const [dueDate, setDueDate] = useState<Date>(new Date());
   const { state, dispatch } = useContext(ReducerContext);
+  const { completed, incomplete } = state.todos;
+  const todoCount = completed.length + incomplete.length;
   const changeName = (e: React.ChangeEvent<HTMLInputElement>) => {
     setName(e.currentTarget.value);
   };
-  const changeDueDate = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.currentTarget.valueAsDate) setDueDate(e.currentTarget.valueAsDate);
+  const changeDueDate = (value: Date) => {
+    if (value) setDueDate(value);
   };
   const clearForm = () => {
     setName("");
@@ -147,11 +243,11 @@ const TodoInput: React.FC<TodoInputProps> = () => {
     dispatch({
       type: "createTodo",
       payload: {
-        id: state.todos.length,
+        id: todoCount,
         name,
         dueDate,
         completed: false,
-        sortOrder: state.todos.length,
+        sortOrder: state.todos.incomplete.length,
       },
     });
     clearForm();
@@ -165,19 +261,14 @@ const TodoInput: React.FC<TodoInputProps> = () => {
         className="todoInput"
         value={name}
         placeholder="new todo"
-      ></input>
-      <input
-        name="dueDate"
-        type="date"
-        onChange={changeDueDate}
-        className="todoInput"
-        value={dueDate.toDateString()}
-      ></input>
-      <button
-        type="submit"
-        className="todoSubmitButton"
-        disabled={!!name && !!dueDate}
-      >
+      />
+      <DatePicker
+        onChange={(e) =>
+          Array.isArray(e) ? changeDueDate(e[0]) : changeDueDate(e)
+        }
+        value={dueDate}
+      />
+      <button type="submit" className="todoSubmitButton" disabled={!name}>
         Add Todo
       </button>
     </form>
@@ -187,21 +278,25 @@ const TodoInput: React.FC<TodoInputProps> = () => {
 const ReducerContext = React.createContext<{
   state: AAState;
   dispatch: React.Dispatch<ReducerAction>;
-}>({ state: { todos: [] }, dispatch: () => {} });
+}>({
+  state: { todos: { completed: [], incomplete: [] }, categories: [] },
+  dispatch: () => {},
+});
 
 const sortDescByDueDate = (todos: TodoType[]) => {
   return todos.sort((a, b) => Number(b.dueDate) - Number(a.dueDate));
 };
 
+const sortAscBySortOrder = (todos: TodoType[]) => {
+  return todos.sort((a, b) => a.sortOrder - b.sortOrder);
+};
+
 const App = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const { todos } = state;
-  const incompleteTodos = sortDescByDueDate(
-    todos.filter((todo) => !todo.completed)
-  );
-  const completedTodos = sortDescByDueDate(
-    todos.filter((todo) => todo.completed)
-  );
+  const { incomplete, completed } = todos;
+  const completedTodos = sortAscBySortOrder(completed);
+  const incompleteTodos = sortAscBySortOrder(incomplete);
   return (
     <ReducerContext.Provider value={{ state, dispatch }}>
       <div className="App">
@@ -211,7 +306,7 @@ const App = () => {
             <div />
             <div />
           </div>
-          <TodoInput />
+          <TodoForm />
           {incompleteTodos.length ? (
             incompleteTodos.map((todo, todoIndex) => {
               return <Todo key={`todo${todoIndex}`} todo={todo} />;
