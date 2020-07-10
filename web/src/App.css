@@ -1,26 +1,32 @@
 .App {
+  position: relative;
   display: flex;
-  flex-direction: column;
   justify-content: space-around;
-  min-height: 100vh;
+  align-items: center;
+  height: 100vh;
   width: 100vw;
   background-image: linear-gradient(120deg, #84fab0 0%, #8fd3f4 100%);
-  align-items: center;
+}
+
+.tableTitle {
+  font-size: 2rem;
 }
 
 .todoList {
-  position: relative;
-  height: 50vh;
-  width: 60vw;
-  margin-top: 25px;
+  min-height: 50vh;
+  min-width: 60vw;
+  overflow-y: scroll;
   padding: 20px;
-  background-image: linear-gradient(to top, #cfd9df 0%, #e2ebf0 100%);
+  background-image: linear-gradient(to top, #ffffff69 0%, #ffffff3d 100%);
   border-radius: 20px;
 }
 
 .todo {
+  list-style: none;
   display: flex;
-  background-image: linear-gradient(120deg, #fdfbfb 0%, #ebedee 100%);
+  background: #ebedee3d;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15), 0 3px 9px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease-in-out;
   padding: 10px;
   margin-bottom: 10px;
   border-radius: 10px;
@@ -28,36 +34,109 @@
 }
 
 .todo:hover {
-  background-image: linear-gradient(120deg, #cb22bd 0%, #ab3564 100%);
-}
-
-.todoHeader {
-  padding: 0 10px 10px 10px;
-  font-weight: 700;
-  font-size: x-large;
-  display: flex;
-  justify-content: space-between;
+  background: #ebedeed0;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3), 0 5px 15px rgba(0, 0, 0, 0.1);
 }
 
 .todoText {
   font-weight: 300;
   font-size: large;
+  text-align: center;
 }
 
-.secondList {
-  margin-top: 25px;
+.todoHeader {
+  padding: 0 10px 10px 10px;
+  font-weight: 200;
+  font-size: x-large;
+  display: flex;
+  justify-content: space-between;
 }
 
-.addButton {
-  position: absolute;
-  bottom: 20px;
-  right: 20px;
-  padding: 10px;
-  background-color: green;
-  color: white;
-  height: 64px;
-  width: 64px;
-  font-size: 32px;
-  font-weight: 700;
-  border-radius: 50%;
+.todoForm {
+  list-style: none;
+  display: flex;
+  margin-bottom: 10px;
+  border-radius: 10px;
+  justify-content: space-between;
+}
+
+.todoInput {
+  font-weight: 200;
+  font-size: 1rem;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
+  flex: 1;
+  height: 1.5rem;
+  padding: 5px;
+  border: solid 1 gray;
+  margin-right: 15px;
+  opacity: 0.5;
+  transition: opacity 0.5s ease-in-out;
+}
+
+.todoSubmitButton {
+  font-weight: 200;
+  font-size: 1rem;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
+  height: 2.4rem;
+  border: solid 1 gray;
+  opacity: 0.75;
+  transition: opacity 0.25s ease-in-out;
+}
+
+.todoInput:focus,
+.todoSubmitButton:focus {
+  opacity: 1;
+}
+
+.sortingButtonGroup {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.sortingButton {
+  align-self: center;
+  padding: 3px;
+  margin: 0 3px;
+  border-radius: 3px;
+  opacity: 0.8;
+}
+
+.sortUp {
+  background-color: #af88c9;
+}
+.sortDown {
+  background-color: #88c9c9;
+}
+
+.sortComplete {
+  margin-right: 9px;
+  background-color: #8dc988;
+}
+.sortRestore {
+  margin-right: 9px;
+  background-color: #c9c888;
+}
+.sortDelete {
+  margin-left: 9px;
+  background-color: #c98888;
+}
+
+.todoColumn {
+  flex: 1;
+}
+
+.lastColumn {
+  text-align: right;
+}
+
+.firstColumn {
+  text-align: left;
+}
+
+.link {
+  cursor: pointer;
 }
