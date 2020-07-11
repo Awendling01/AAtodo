@@ -1,6 +1,5 @@
 export type AAState = {
   todos: { completed: TodoType[]; incomplete: TodoType[] };
-  categories: string[];
 };
 
 export type ReducerAction = {
@@ -20,4 +19,5 @@ export type TodoType = {
   name: string;
   dueDate: Date;
   completed: boolean;
+  category: string;
 };
