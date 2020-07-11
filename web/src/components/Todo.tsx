@@ -7,6 +7,22 @@ import {
   FaTimes,
   FaRecycle,
   FaCheck,
+  FaAnchor,
+  FaBars,
+  FaGooglePlusSquare,
+  FaAccessibleIcon,
+  FaAdjust,
+  FaTrash,
+  FaGrinAlt,
+  FaCriticalRole,
+  FaPlusCircle,
+  FaCircle,
+  FaCircleNotch,
+  FaCheckSquare,
+  FaSquareRootAlt,
+  FaGgCircle,
+  FaAlignCenter,
+  FaCheckCircle,
 } from "react-icons/fa";
 
 type TodoProps = {
@@ -42,7 +58,7 @@ export const Todo: React.FC<TodoProps> = ({ todo }) => {
     <div
       className={`todo ${todo.completed ? "completedTodo" : "incompleteTodo"}`}
     >
-      <button onClick={doSomething}>Do It!</button>
+      {/* <button onClick={doSomething}>Do It!</button> */}
       {todo.completed ? (
         <div
           className="sortingButton sortRestore link"
@@ -52,7 +68,7 @@ export const Todo: React.FC<TodoProps> = ({ todo }) => {
         </div>
       ) : (
         <div className="sortingButton sortComplete link" onClick={markComplete}>
-          <FaCheck />
+          <FaCheckCircle />
         </div>
       )}
       <div className="todoColumn name">
@@ -73,7 +89,7 @@ export const Todo: React.FC<TodoProps> = ({ todo }) => {
           </React.Fragment>
         ) : null}
         <div className="sortingButton sortDelete link" onClick={deleteTodo}>
-          <FaTimes />
+          <FaTrash />
         </div>
       </div>
     </div>

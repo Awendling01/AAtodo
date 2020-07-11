@@ -5,7 +5,7 @@
   align-items: center;
   height: 100vh;
   width: 100vw;
-  background-image: linear-gradient(120deg, #3f5547 0%, #385361 100%);
+  background-image: linear-gradient(120deg, #481053 0%, #0ba1ec 100%);
 }
 
 .tableTitle {
@@ -24,8 +24,9 @@
 .todo {
   list-style: none;
   display: flex;
-  background: #ebedee3d;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15), 0 3px 9px rgba(0, 0, 0, 0.1);
+  background: #242f92cc;
+  box-shadow: 0 1px 2px rgba(105, 4, 236, 0.15),
+    0 3px 9px rgba(42, 14, 105, 0.1);
   transition: all 0.2s ease-in-out;
   padding: 10px;
   margin-bottom: 10px;
@@ -34,7 +35,7 @@
 }
 
 .todo:hover {
-  background: #ebedeed0;
+  background: #03537a0c;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3), 0 5px 15px rgba(0, 0, 0, 0.1);
 }
 
@@ -106,23 +107,23 @@
 }
 
 .sortUp {
-  background-color: #af88c9;
+  background-color: #9413eb;
 }
 .sortDown {
-  background-color: #88c9c9;
+  background-color: #0eeeee;
 }
 
 .sortComplete {
   margin-right: 9px;
-  background-color: #8dc988;
+  background-color: #1cf309;
 }
 .sortRestore {
   margin-right: 9px;
-  background-color: #c9c888;
+  background-color: #f5f10d;
 }
 .sortDelete {
   margin-left: 9px;
-  background-color: #c98888;
+  background-color: #da2f2f;
 }
 
 .todoColumn {

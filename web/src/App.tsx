@@ -18,7 +18,7 @@ const App = () => {
       <div className="App">
         <div className="todoList">
           <div className="todoHeader">
-            <div className="tableTitle">Todos</div>
+            <div className="tableTitle">TODO</div>
             <div />
             <div />
           </div>
@@ -35,7 +35,7 @@ const App = () => {
           {completedTodos.length ? (
             <React.Fragment>
               <div className="todoHeader">
-                <div className="tableTitle">Todones</div>
+                <div className="tableTitle">DONE</div>
                 <div />
                 <div />
               </div>
