@@ -2,10 +2,11 @@ import todos from "../utils/data";
 import { AAState, ReducerAction } from "../utils/types";
 export const initialState: AAState = {
   todos: {
-    completed: todos.filter((todo) => todo.completed),
-    incomplete: todos.filter((todo) => !todo.completed),
+    completed: [],
+    incomplete: [],
+    // completed: todos.filter((todo) => todo.completed),
+    // incomplete: todos.filter((todo) => !todo.completed),
   },
-  categories: [],
 };
 
 export const reducer = (state: AAState, action: ReducerAction) => {

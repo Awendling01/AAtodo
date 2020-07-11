@@ -4,6 +4,6 @@ export const ReducerContext = React.createContext<{
   state: AAState;
   dispatch: React.Dispatch<ReducerAction>;
 }>({
-  state: { todos: { completed: [], incomplete: [] }, categories: [] },
+  state: { todos: { completed: [], incomplete: [] } },
   dispatch: () => {},
 });
