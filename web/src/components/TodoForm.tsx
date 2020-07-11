@@ -7,11 +7,15 @@ type TodoFormProps = {};
 export const TodoForm: React.FC<TodoFormProps> = () => {
   const [name, setName] = useState<string>("");
   const [dueDate, setDueDate] = useState<Date>(new Date());
+  const [category, setCategory] = useState<string>("");
   const { state, dispatch } = useContext(ReducerContext);
   const { completed, incomplete } = state.todos;
   const todoCount = completed.length + incomplete.length;
   const changeName = (e: React.ChangeEvent<HTMLInputElement>) => {
     setName(e.currentTarget.value);
+  };
+  const changeCategory = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setCategory(e.currentTarget.value);
   };
   const changeDueDate = (value: Date) => {
     if (value) setDueDate(value);
@@ -19,6 +23,7 @@ export const TodoForm: React.FC<TodoFormProps> = () => {
   const clearForm = () => {
     setName("");
     setDueDate(new Date());
+    setCategory("");
   };
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -30,6 +35,7 @@ export const TodoForm: React.FC<TodoFormProps> = () => {
         dueDate,
         completed: false,
         sortOrder: state.todos.incomplete.length,
+        category,
       },
     });
     clearForm();
@@ -43,6 +49,14 @@ export const TodoForm: React.FC<TodoFormProps> = () => {
         className="todoInput"
         value={name}
         placeholder="new todo"
+      />
+      <input
+        name="category"
+        type="text"
+        onChange={(e) => changeCategory(e)}
+        className="todoInput"
+        value={category}
+        placeholder="category"
       />
       <DatePicker
         onChange={(e) =>

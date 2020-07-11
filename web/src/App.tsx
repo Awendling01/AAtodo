@@ -1,4 +1,4 @@
-import React, { useReducer } from "react";
+import React, { useReducer, useState } from "react";
 import { TodoForm } from "./components/TodoForm";
 import "./App.css";
 
@@ -9,13 +9,50 @@ import { Todo } from "./components/Todo";
 
 const App = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
+  const [currentCategory, setCurrentCategory] = useState<string | undefined>(
+    undefined
+  );
   const { todos } = state;
   const { incomplete, completed } = todos;
-  const completedTodos = sortAscBySortOrder(completed);
-  const incompleteTodos = sortAscBySortOrder(incomplete);
+  const allTodos = [...incomplete, ...completed];
+  const completedTodos = currentCategory
+    ? sortAscBySortOrder(
+        completed.filter((td) => td.category === currentCategory)
+      )
+    : sortAscBySortOrder(completed);
+  const incompleteTodos = currentCategory
+    ? sortAscBySortOrder(
+        incomplete.filter((td) => td.category === currentCategory)
+      )
+    : sortAscBySortOrder(incomplete);
+  const categories = allTodos
+    .map((todo) => todo.category)
+    .filter((value, index, array) => array.indexOf(value) === index);
+  const selectCategory = (category: string) => {
+    setCurrentCategory(category);
+  };
+  const clearCategory = () => {
+    setCurrentCategory(undefined);
+  };
   return (
     <ReducerContext.Provider value={{ state, dispatch }}>
       <div className="App">
+        <div>
+          {currentCategory ? (
+            <div className="currentCategoryTab" onClick={clearCategory}>
+              <div className="todoText">{currentCategory}</div>
+            </div>
+          ) : null}
+          {categories.map((category, categoryIndex) => (
+            <div
+              key={`categoryTab${categoryIndex}`}
+              className="categoryTab"
+              onClick={() => selectCategory(category)}
+            >
+              <div className="todoText">{category}</div>
+            </div>
+          ))}
+        </div>
         <div className="todoList">
           <div className="todoHeader">
             <div className="tableTitle">TODO</div>

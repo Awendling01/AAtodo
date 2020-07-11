@@ -72,7 +72,9 @@ export const Todo: React.FC<TodoProps> = ({ todo }) => {
         </div>
       )}
       <div className="todoColumn name">
-        <div className="todoText firstColumn">{todo.name}</div>
+        <div className="todoText firstColumn">
+          {todo.name + " (" + todo.category + ")"}
+        </div>
       </div>
       <div className="todoColumn dueDate">
         <div className="todoText">{todo.dueDate.toDateString()}</div>
