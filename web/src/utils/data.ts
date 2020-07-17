@@ -7,6 +7,7 @@ const todos: TodoType[] = [
     name: "Get groceries",
     dueDate: new Date(),
     completed: false,
+    category: "Home",
   },
   {
     id: 6,
@@ -14,6 +15,7 @@ const todos: TodoType[] = [
     name: "Wash dog",
     dueDate: new Date(),
     completed: false,
+    category: "Home",
   },
   {
     id: 5,
@@ -21,6 +23,7 @@ const todos: TodoType[] = [
     name: "Clean house",
     dueDate: new Date(),
     completed: false,
+    category: "Home",
   },
   {
     id: 4,
@@ -28,6 +31,7 @@ const todos: TodoType[] = [
     name: "Prospect gold",
     dueDate: new Date(),
     completed: true,
+    category: "Work",
   },
   {
     id: 3,
@@ -35,6 +39,7 @@ const todos: TodoType[] = [
     name: "Wash Car",
     dueDate: new Date(),
     completed: true,
+    category: "Work",
   },
   {
     id: 2,
@@ -42,6 +47,7 @@ const todos: TodoType[] = [
     name: "Do Laundry",
     dueDate: new Date(),
     completed: true,
+    category: "Work",
   },
   {
     id: 1,
@@ -49,6 +55,7 @@ const todos: TodoType[] = [
     name: "Clean Garage",
     dueDate: new Date(),
     completed: true,
+    category: "School",
   },
   {
     id: 0,
@@ -56,6 +63,7 @@ const todos: TodoType[] = [
     name: "Shovel Poop",
     dueDate: new Date(),
     completed: true,
+    category: "School",
   },
 ];
 export default todos;
