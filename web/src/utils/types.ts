@@ -2,6 +2,12 @@ export type AAState = {
   todos: { completed: TodoType[]; incomplete: TodoType[] };
 };
 
+export type User = {
+  firstName: string;
+  lastName?: string;
+  username: string;
+};
+
 export type ReducerAction = {
   type:
     | "markTodoComplete"
