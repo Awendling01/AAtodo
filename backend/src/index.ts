@@ -1,42 +1,27 @@
 import express from "express";
+import cors from "cors";
+import { UserListResponse, TodoListResponse } from "./types";
+import { users, todos } from "./data";
+
 const app = express();
+app.use(cors());
 const port = 4000;
 
-type User = {
-  id: number;
-  firstName: string;
-  lastName?: string;
-  username: string;
-};
-
-type UserListResponse = {
-  users: User[];
-};
-
-app.get("/users", (req, res) => {
+app.get("/users", (_req, res) => {
   const usersList: UserListResponse = {
-    users: [
-      {
-        id: 0,
-        firstName: "John",
-        lastName: "Hill",
-        username: "DeathstarNovember",
-      },
-      {
-        id: 1,
-        firstName: "Andrew",
-        lastName: "Wendling",
-        username: "goHikeCo1",
-      },
-      {
-        id: 2,
-        firstName: "Ali",
-        lastName: "Wendling",
-        username: "household6",
-      },
-    ],
+    users,
   };
   res.send(usersList);
+});
+
+app.get("/todos", (_req, res) => {
+  const todosList: TodoListResponse = {
+    todos: {
+      completed: todos.filter((todo) => todo.completed),
+      incomplete: todos.filter((todo) => !todo.completed),
+    },
+  };
+  res.send(todosList);
 });
 
 app.listen(port, () => {

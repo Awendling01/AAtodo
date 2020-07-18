@@ -1,17 +1,11 @@
-import todos from "../utils/data";
-import { AAState, ReducerAction } from "../utils/types";
-export const initialState: AAState = {
-  todos: {
-    completed: [],
-    incomplete: [],
-    // completed: todos.filter((todo) => todo.completed),
-    // incomplete: todos.filter((todo) => !todo.completed),
-  },
-};
+import { AAState, TodoAction } from "../utils/types";
 
-export const reducer = (state: AAState, action: ReducerAction) => {
+export const initialState: AAState = {
+  todos: { completed: [], incomplete: [] },
+};
+export const reducer = (state: AAState, action: TodoAction) => {
   const todo = action.payload;
-  const { completed, sortOrder, id } = todo;
+  const { id, completed, sortOrder } = todo;
   const {
     completed: completedTodos,
     incomplete: incompleteTodos,
@@ -77,6 +71,7 @@ export const reducer = (state: AAState, action: ReducerAction) => {
       } else {
         return { ...state };
       }
+      break;
     case "moveTodoDown":
       if (nextTodo && !completed) {
         const newMovedUpState = {
@@ -119,6 +114,7 @@ export const reducer = (state: AAState, action: ReducerAction) => {
         };
       }
     default:
-      throw new Error("action not found");
+      return { ...state };
   }
+  return { ...state };
 };

@@ -4,24 +4,8 @@ import { ReducerContext } from "../utils/Context";
 import {
   FaArrowUp,
   FaArrowDown,
-  FaTimes,
   FaRecycle,
-  FaCheck,
-  FaAnchor,
-  FaBars,
-  FaGooglePlusSquare,
-  FaAccessibleIcon,
-  FaAdjust,
   FaTrash,
-  FaGrinAlt,
-  FaCriticalRole,
-  FaPlusCircle,
-  FaCircle,
-  FaCircleNotch,
-  FaCheckSquare,
-  FaSquareRootAlt,
-  FaGgCircle,
-  FaAlignCenter,
   FaCheckCircle,
 } from "react-icons/fa";
 
@@ -44,12 +28,6 @@ export const Todo: React.FC<TodoProps> = ({ todo }) => {
   const sortDown = () => {
     dispatch({ type: "moveTodoDown", payload: todo });
   };
-  const toggleCompleted = () => {
-    todo.completed ? markIncomplete() : markComplete();
-  };
-  const doSomething = () => {
-    alert("I did it!");
-  };
   const deleteTodo = () => {
     dispatch({ type: "deleteTodo", payload: todo });
   };
@@ -58,7 +36,6 @@ export const Todo: React.FC<TodoProps> = ({ todo }) => {
     <div
       className={`todo ${todo.completed ? "completedTodo" : "incompleteTodo"}`}
     >
-      {/* <button onClick={doSomething}>Do It!</button> */}
       {todo.completed ? (
         <div
           className="sortingButton sortRestore link"
@@ -77,7 +54,7 @@ export const Todo: React.FC<TodoProps> = ({ todo }) => {
         </div>
       </div>
       <div className="todoColumn dueDate">
-        <div className="todoText">{todo.dueDate.toDateString()}</div>
+        <div className="todoText">{todo.dueDate}</div>
       </div>
       <div className="todoColumn sortingButtonGroup">
         {!todo.completed ? (

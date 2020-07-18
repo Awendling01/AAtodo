@@ -1,4 +1,4 @@
-import React, { useReducer, useState } from "react";
+import React, { useReducer, useState, useEffect } from "react";
 import { TodoForm } from "./components/TodoForm";
 import "./App.css";
 
@@ -6,14 +6,17 @@ import { ReducerContext } from "./utils/Context";
 import { reducer, initialState } from "./reducer/reducer";
 import { sortAscBySortOrder } from "./utils/utils";
 import { Todo } from "./components/Todo";
+import { getUsers, getAllTodos } from "./utils/data";
+import { User, TodoList } from "./utils/types";
 
 const App = () => {
-  const [state, dispatch] = useReducer(reducer, initialState);
+  const [users, setUsers] = useState<User[]>([]);
+  const [todos, setTodos] = useState<TodoList>(initialState.todos);
+  const [state, dispatch] = useReducer(reducer, { todos });
   const [currentCategory, setCurrentCategory] = useState<string | undefined>(
     undefined
   );
-  const { todos } = state;
-  const { incomplete, completed } = todos;
+  const { incomplete, completed } = state.todos;
   const allTodos = [...incomplete, ...completed];
   const completedTodos = currentCategory
     ? sortAscBySortOrder(
@@ -34,6 +37,13 @@ const App = () => {
   const clearCategory = () => {
     setCurrentCategory(undefined);
   };
+  useEffect(() => {
+    getUsers().then((res) => setUsers(res));
+    getAllTodos().then((res) => setTodos(res));
+  }, []);
+  if (!todos.completed.length && !todos.incomplete.length) {
+    return null;
+  }
   return (
     <ReducerContext.Provider value={{ state, dispatch }}>
       <div className="App">

@@ -1,14 +1,22 @@
+export type TodoList = {
+  completed: TodoType[];
+  incomplete: TodoType[];
+};
+
 export type AAState = {
-  todos: { completed: TodoType[]; incomplete: TodoType[] };
+  todos: TodoList;
 };
 
 export type User = {
+  id: number;
   firstName: string;
   lastName?: string;
   username: string;
 };
 
-export type ReducerAction = {
+export type NewUser = Omit<User, "id">;
+
+export type TodoAction = {
   type:
     | "markTodoComplete"
     | "markTodoIncomplete"
@@ -18,6 +26,13 @@ export type ReducerAction = {
     | "moveTodoDown";
   payload: TodoType;
 };
+
+export type TodoListAction = {
+  type: "addInitialTodos";
+  payload: TodoList;
+};
+
+export type ReducerAction = TodoAction | TodoListAction;
 
 export type TodoType = {
   id: number;

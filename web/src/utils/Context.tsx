@@ -1,8 +1,8 @@
 import React from "react";
-import { AAState, ReducerAction } from "./types";
+import { AAState, TodoAction } from "./types";
 export const ReducerContext = React.createContext<{
   state: AAState;
-  dispatch: React.Dispatch<ReducerAction>;
+  dispatch: React.Dispatch<TodoAction>;
 }>({
   state: { todos: { completed: [], incomplete: [] } },
   dispatch: () => {},
