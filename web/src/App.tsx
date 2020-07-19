@@ -11,8 +11,7 @@ import { User, TodoList } from "./utils/types";
 
 const App = () => {
   const [users, setUsers] = useState<User[]>([]);
-  const [todos, setTodos] = useState<TodoList>(initialState.todos);
-  const [state, dispatch] = useReducer(reducer, { todos });
+  const [state, dispatch] = useReducer(reducer, initialState);
   const [currentCategory, setCurrentCategory] = useState<string | undefined>(
     undefined
   );
@@ -39,9 +38,11 @@ const App = () => {
   };
   useEffect(() => {
     getUsers().then((res) => setUsers(res));
-    getAllTodos().then((res) => setTodos(res));
+    getAllTodos().then((res) =>
+      dispatch({ type: "initializeTodos", payload: res })
+    );
   }, []);
-  if (!todos.completed.length && !todos.incomplete.length) {
+  if (!state) {
     return null;
   }
   return (

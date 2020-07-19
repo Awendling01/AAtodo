@@ -28,7 +28,7 @@ export type TodoAction = {
 };
 
 export type TodoListAction = {
-  type: "addInitialTodos";
+  type: "initializeTodos";
   payload: TodoList;
 };
 
