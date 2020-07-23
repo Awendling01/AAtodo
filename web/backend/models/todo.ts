@@ -27,11 +27,19 @@ const Todo = sequelize.define(
       type: DataTypes.STRING,
       allowNull: false,
     },
+    userId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: User,
+        key: "id",
+      },
+    },
   },
   {
     // Other model options go here
   }
 );
 
-User.hasOne(User);
+User.belongsTo(User);
 export default Todo;

@@ -15,6 +15,15 @@ const User = sequelize.define(
       allowNull: false,
       // allowNull defaults to true
     },
+    fullName: {
+      type: DataTypes.VIRTUAL(DataTypes.STRING, ["firstName", "lastName"]),
+      get: () => {
+        return `${this.firstName} ${this.lastName}`;
+      },
+      set: (_value) => {
+        throw new Error("User.fullName is a read-only attribute");
+      },
+    },
     username: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -25,6 +34,6 @@ const User = sequelize.define(
   }
 );
 
-User.hasMany(Todo);
+User.hasMany(Todo, { foreignKey: "userId" });
 
 export default User;

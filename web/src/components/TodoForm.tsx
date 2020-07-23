@@ -1,16 +1,22 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import DatePicker from "react-date-picker";
-import { ReducerContext } from "../utils/Context";
+import { CreateTodoInput, User } from "../generated/graphql";
+import { formatDateForMutation } from "../utils/utils";
 
-type TodoFormProps = {};
+type TodoFormProps = {
+  currentUser: User;
+  incompleteCount: number;
+  createTodo: (input: CreateTodoInput) => void;
+};
 
-export const TodoForm: React.FC<TodoFormProps> = () => {
+export const TodoForm: React.FC<TodoFormProps> = ({
+  currentUser,
+  incompleteCount,
+  createTodo,
+}) => {
   const [name, setName] = useState<string>("");
   const [dueDate, setDueDate] = useState<Date>(new Date());
   const [category, setCategory] = useState<string>("");
-  const { state, dispatch } = useContext(ReducerContext);
-  const { completed, incomplete } = state.todos;
-  const todoCount = completed.length + incomplete.length;
   const changeName = (e: React.ChangeEvent<HTMLInputElement>) => {
     setName(e.currentTarget.value);
   };
@@ -27,19 +33,22 @@ export const TodoForm: React.FC<TodoFormProps> = () => {
   };
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    dispatch({
-      type: "createTodo",
-      payload: {
-        id: todoCount,
+    const input: CreateTodoInput = {
+      todo: {
         name,
-        dueDate,
+        dueDate: formatDateForMutation(dueDate),
         completed: false,
-        sortOrder: state.todos.incomplete.length,
+        sortOrder: incompleteCount,
         category,
+        userId: currentUser.id,
+        createdAt: formatDateForMutation(),
+        updatedAt: formatDateForMutation(),
       },
-    });
+    };
+    createTodo(input);
     clearForm();
   };
+
   return (
     <form className="todoForm" onSubmit={handleSubmit}>
       <input

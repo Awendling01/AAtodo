@@ -5,18 +5,20 @@ import { PoolConfig } from "pg";
 
 const app = express();
 app.use(cors());
-const port = 4000;
+const port = 5432;
 
 const pgConfig: PoolConfig = {
   host: process.env.PGHOST || "localhost",
-  port: Number(process.env.PGPORT) || 5432,
+  port: Number(process.env.PGPORT) || port,
   user: process.env.PGUSER,
   database: process.env.PGDATABASE,
   password: process.env.PGPASSWORD,
 };
 
 const postgraphileOptions = {
-  /* ... */
+  watchPg: true,
+  graphiql: true,
+  enhanceGraphiql: true,
 };
 
 app.use(postgraphile(pgConfig, "public", postgraphileOptions));

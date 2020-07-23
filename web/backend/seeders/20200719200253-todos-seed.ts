@@ -11,7 +11,7 @@ module.exports = {
           category: "Home",
           createdAt: new Date(),
           updatedAt: new Date(),
-          userId: 0,
+          userId: 1,
         },
         {
           sortOrder: 1,
@@ -21,7 +21,7 @@ module.exports = {
           category: "Home",
           createdAt: new Date(),
           updatedAt: new Date(),
-          userId: 0,
+          userId: 1,
         },
         {
           sortOrder: 2,
@@ -31,7 +31,7 @@ module.exports = {
           category: "Home",
           createdAt: new Date(),
           updatedAt: new Date(),
-          userId: 0,
+          userId: 1,
         },
         {
           sortOrder: 3,
@@ -41,7 +41,7 @@ module.exports = {
           category: "Work",
           createdAt: new Date(),
           updatedAt: new Date(),
-          userId: 0,
+          userId: 1,
         },
         {
           sortOrder: 4,
@@ -51,7 +51,7 @@ module.exports = {
           category: "Work",
           createdAt: new Date(),
           updatedAt: new Date(),
-          userId: 0,
+          userId: 1,
         },
         {
           sortOrder: 5,
@@ -61,7 +61,7 @@ module.exports = {
           category: "Work",
           createdAt: new Date(),
           updatedAt: new Date(),
-          userId: 0,
+          userId: 1,
         },
         {
           sortOrder: 6,
@@ -71,7 +71,7 @@ module.exports = {
           category: "School",
           createdAt: new Date(),
           updatedAt: new Date(),
-          userId: 0,
+          userId: 1,
         },
         {
           sortOrder: 7,
@@ -81,7 +81,7 @@ module.exports = {
           category: "School",
           createdAt: new Date(),
           updatedAt: new Date(),
-          userId: 0,
+          userId: 1,
         },
       ],
       {}

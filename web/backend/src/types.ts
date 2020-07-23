@@ -3,6 +3,7 @@ export type User = {
   firstName: string;
   lastName?: string;
   username: string;
+  todos: TodoType[];
 };
 
 export type UserListResponse = {
@@ -16,6 +17,7 @@ export type TodoType = {
   dueDate: Date;
   completed: boolean;
   category: string;
+  userId: number;
 };
 
 export type TodoListResponse = {
