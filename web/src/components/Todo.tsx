@@ -1,73 +1,54 @@
-import React, { useContext } from "react";
-import { TodoType } from "../utils/types";
-import { ReducerContext } from "../utils/Context";
+import React from "react";
 import {
   FaArrowUp,
   FaArrowDown,
-  FaTimes,
   FaRecycle,
-  FaCheck,
-  FaAnchor,
-  FaBars,
-  FaGooglePlusSquare,
-  FaAccessibleIcon,
-  FaAdjust,
   FaTrash,
-  FaGrinAlt,
-  FaCriticalRole,
-  FaPlusCircle,
-  FaCircle,
-  FaCircleNotch,
-  FaCheckSquare,
-  FaSquareRootAlt,
-  FaGgCircle,
-  FaAlignCenter,
   FaCheckCircle,
 } from "react-icons/fa";
+import { Todo } from "../generated/graphql";
 
 type TodoProps = {
-  todo: TodoType;
+  todo: Todo;
+  todoIndex: number;
+  mutations: {
+    markComplete: (todo: Todo) => void;
+    markIncomplete: (todo: Todo) => void;
+    sortUp: (todo: Todo, todoIndex: number) => void;
+    sortDown: (todo: Todo, todoIndex: number) => void;
+    deleteTodo: (todo: Todo) => void;
+  };
 };
 
-export const Todo: React.FC<TodoProps> = ({ todo }) => {
-  const { dispatch } = useContext(ReducerContext);
-  //Event Handler Functions
-  const markComplete = () => {
-    dispatch({ type: "markTodoComplete", payload: todo });
-  };
-  const markIncomplete = () => {
-    dispatch({ type: "markTodoIncomplete", payload: todo });
-  };
-  const sortUp = () => {
-    dispatch({ type: "moveTodoUp", payload: todo });
-  };
-  const sortDown = () => {
-    dispatch({ type: "moveTodoDown", payload: todo });
-  };
-  const toggleCompleted = () => {
-    todo.completed ? markIncomplete() : markComplete();
-  };
-  const doSomething = () => {
-    alert("I did it!");
-  };
-  const deleteTodo = () => {
-    dispatch({ type: "deleteTodo", payload: todo });
-  };
+export const TodoComponent: React.FC<TodoProps> = ({
+  todo,
+  todoIndex,
+  mutations,
+}) => {
+  const {
+    markComplete,
+    markIncomplete,
+    sortUp,
+    sortDown,
+    deleteTodo,
+  } = mutations;
 
   return (
     <div
       className={`todo ${todo.completed ? "completedTodo" : "incompleteTodo"}`}
     >
-      {/* <button onClick={doSomething}>Do It!</button> */}
       {todo.completed ? (
         <div
           className="sortingButton sortRestore link"
-          onClick={markIncomplete}
+          onClick={() => markIncomplete(todo)}
         >
           <FaRecycle />
         </div>
       ) : (
-        <div className="sortingButton sortComplete link" onClick={markComplete}>
+        <div
+          className="sortingButton sortComplete link"
+          onClick={() => markComplete(todo)}
+        >
           <FaCheckCircle />
         </div>
       )}
@@ -77,20 +58,29 @@ export const Todo: React.FC<TodoProps> = ({ todo }) => {
         </div>
       </div>
       <div className="todoColumn dueDate">
-        <div className="todoText">{todo.dueDate.toDateString()}</div>
+        <div className="todoText">{new Date(todo.dueDate).toDateString()}</div>
       </div>
       <div className="todoColumn sortingButtonGroup">
         {!todo.completed ? (
           <React.Fragment>
-            <div onClick={sortUp} className="sortingButton sortUp link">
+            <div
+              onClick={() => sortUp(todo, todoIndex)}
+              className="sortingButton sortUp link"
+            >
               <FaArrowUp />
             </div>
-            <div onClick={sortDown} className="sortingButton sortDown link">
+            <div
+              onClick={() => sortDown(todo, todoIndex)}
+              className="sortingButton sortDown link"
+            >
               <FaArrowDown />
             </div>
           </React.Fragment>
         ) : null}
-        <div className="sortingButton sortDelete link" onClick={deleteTodo}>
+        <div
+          className="sortingButton sortDelete link"
+          onClick={() => deleteTodo(todo)}
+        >
           <FaTrash />
         </div>
       </div>
